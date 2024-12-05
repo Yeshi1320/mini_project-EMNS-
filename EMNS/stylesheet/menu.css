@@ -1,0 +1,109 @@
+/* Profile Dropdown */
+.profile-dropdown {
+    display: none;
+    position: absolute;
+    top: 60px; /* Adjust this for proper spacing */
+    right: 20px; /* Adjust this for proper alignment */
+    background-color: white;
+    color: #333;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 15px;
+    width: 250px; /* Define a width */
+    z-index: 1000;
+}
+
+/* Profile Header */
+.profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.profile-header .avatar {
+    background-color: #4CAF50;
+    color: white;
+    font-size: 24px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.profile-header h4 {
+    margin-left: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+.profile-header p {
+    font-size: 12px;
+    color: #666;
+    margin-left: 10px;
+}
+
+/* Info Section */
+.profile-info {
+    margin-top: 10px;
+}
+
+.profile-info .info-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #555;
+}
+
+.profile-info .info-item i {
+    margin-right: 10px;
+}
+
+/* Links Styling */
+.profile-info .info-item a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.profile-info .info-item a:hover {
+    text-decoration: underline;
+}
+
+/* Logout Button */
+.profile-footer {
+    margin-top: 10px;
+}
+
+.profile-footer button {
+    width: 100%;
+    background-color:bisque;
+    color: white;
+    padding: 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.profile-footer button:hover {
+    background-color: bisque;
+}
+
+/* Dropdown Items */
+.profile-dropdown a, .menu-dropdown a {
+    padding: 8px 0;
+    font-size: 14px;
+    display: block;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.profile-dropdown a:hover, .menu-dropdown a:hover {
+    background-color: #f4f4f4;
+    border-radius: 5px;
+}

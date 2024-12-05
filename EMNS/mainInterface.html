@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/EMNS/stylesheet/mainInterface.css">
+    <link rel="stylesheet" href="/EMNS/stylesheet/menu.css">
+</head>
+
+<body>
+
+    <!-- Top Navigation -->
+    <div class="top-nav">
+        <button class="menu-button" id="menuButton">
+            <i class="fas fa-bars"></i>
+        </button>
+        <button class="user-icon" id="profileButton">
+            <i class="fas fa-user"></i>
+        </button>
+    </div>
+
+    <!-- Profile Dropdown -->
+    <div class="profile-dropdown" id="profileDropdown">
+        <div class="profile-header">
+            <div class="avatar">S</div>
+            <div class="profile-details">
+                <h2>Sonam Pelden</h2>
+                <p class="email">05230135.jnec@rub.edu.bt</p>
+            </div>
+        </div>
+        <div class="profile-info">
+            <div class="info-item">
+                <i class="fas fa-sync-alt"></i> Sync is on
+            </div>
+            <div class="info-item">
+                <i class="fas fa-cogs"></i> <a href="#">Manage your Google Account</a>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-users"></i> <a href="#">Other Profiles</a>
+            </div>
+        </div>
+    
+        <!-- Other Profiles Section with "+ Add Profile" Button -->
+        <div class="other-profiles">
+            <h3>Other Profiles</h3>
+            <div class="profile-list">
+                <p>Person 1</p>
+                <p>Person 2</p>
+            </div>
+            <!-- Add Profile Button -->
+            <button class="add-profile-btn"><a href="login.html">+ Add Profile</a></button>
+        </div>
+
+        <div class="profile-footer">
+            <button class="logout"><a href="login.html">Logout</a></button>
+        </div>
+        
+    </div>
+    
+
+    <!-- Menu Dropdown -->
+    <div class="menu-dropdown" id="menuDropdown">
+        <a class="dropdown-item" href="support.html" >Support Us</a>
+        <a class="dropdown-item" href="about_us.html">About Us</a>
+    </div>
+
+    <!-- Button Section -->
+    <div class="button-container">
+        <button class="custom-button" data-toggle="modal" data-target="#eventTypeModal" onclick="window.location.href='event_Type.html';" >
+            Event Type <i class="fas fa-calendar-alt button-icon"></i>
+        </button>
+        <button class="custom-button" data-toggle="modal" data-target="#attendanceModal">
+            Attendance <i class="fas fa-users button-icon"></i>
+        </button>
+    </div>
+    <!-- Footer Section -->
+     <!-- Footer Section -->
+    <div class="footer">
+        <a href="login.html" style="text-decoration: none; color: inherit;">
+            <i class="fas fa-home footer-icon"></i>
+        </a>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="/EMNS/javaScript/mainInterface.js"></script>
+</body>
+</html>

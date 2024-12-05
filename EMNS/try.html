@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Management and Notification System</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <link rel="stylesheet" href="/stylesheet/Login_main.css">
+    <link rel="stylesheet" href="/stylesheet/menu.css">
+    <style>
+        /* Your existing styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            background-image: url('/picture/JNEC.jpeg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .container {
+            text-align: center;
+            color: rgb(7, 7, 7);
+        }
+
+        h1 {
+            font-weight: bold;
+            font-size: 2.5em; /* Increased font size for better visibility */
+            margin: 20px 0; /* Add some top margin */
+            position: absolute; /* Position the heading at the top */
+            top: 80px; /* Adjust top space */
+            left: 50%; /* Center it horizontally */
+            transform: translateX(-50%); /* Center the heading exactly */
+            width: 80%; /* Ensure it spans across the page */
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* Add shadow for readability */
+        }
+
+        .get-started {
+            background-color: #00d8ff;
+            color: black;
+            border: none;
+            padding: 15px;
+            width: 50%;
+            border-radius: 25px;
+            font-size: 1.2em; /* Increased font size for better accessibility */
+            cursor: pointer;
+            margin-bottom: 10px;
+            position: absolute;
+            bottom: 80px; /* Adjusted for visual balance */
+            left: 50%;
+            transform: translateX(-50%);
+            transition: background-color 0.3s; /* Smooth transition for hover effect */
+        }
+
+        .get-started:hover {
+            background-color: #0099cc; /* Darker shade on hover */
+        }
+
+        .footer-message {
+            font-size: 20px;
+            color: rgb(8, 8, 8);
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .role-selection-container {
+            display: none; /* Initially hide the role selection container */
+            flex-direction: column; /* Stack items vertically */
+            align-items: center; /* Center items horizontally */
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9); /* Background with some transparency */
+            border-radius: 15px; /* Rounded corners */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+            width: 90%; /* Set width to make it responsive */
+            max-width: 400px; /* Limit the maximum width */
+            margin: auto; /* Center horizontally */
+            transform: translateY(50px); /* Slightly lower for better view */
+        }
+
+        .role-selection-container h2 {
+            margin-bottom: 20px; /* Space below the heading */
+            color: #333; /* Darker color for better readability */
+        }
+
+        .role-buttons {
+            display: flex;
+            flex-direction: column; /* Directions of buttons vertically */
+            width: 100%; /* Make buttons full width */
+            gap: 15px; /* Space between buttons */
+        }
+
+        .role-btn {
+            padding: 15px 20px; /* Padding for buttons */
+            font-size: 1.1em; /* Increase font size */
+            border: none;
+            border-radius: 10px; /* Rounded corners for buttons */
+            color: white; /* Text color */
+            background-color: #00d8ff; /* Button color */
+            transition: background-color 0.3s, transform 0.3s; /* Transition for hover effects */
+            width: 100%; /* Make buttons full width */
+        }
+
+        .role-btn:hover {
+            background-color: #0099cc; /* Darker button color on hover */
+            transform: scale(1.05); /* Slightly increase size on hover */
+        }
+
+        /* Additional styles for specific roles (Optional) */
+        .admin-btn {
+            background-color: #4CAF50;
+        }
+
+        .councilor-btn {
+            background-color: #2196F3;
+        }
+
+        .club-secretary-btn {
+            background-color: #FF9800;
+        }
+
+        .staff-btn {
+            background-color: #9C27B0;
+        }
+
+        .student-btn {
+            background-color: #F44336;
+        }
+
+        .login-form {
+            display: none;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.9); /* Slight transparency */
+            padding: 30px;
+            border-radius: 20px;
+            position: absolute;
+            top: 150px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
+        }
+
+        .login-form.active {
+            display: block;
+        }
+
+        .login-form input {
+            display: block;
+            margin: 10px auto;
+            padding: 10px;
+            width: 80%;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            transition: border-color 0.3s; /* Smooth transition for focus effect */
+        }
+
+        .login-form input:focus {
+            border-color: #00d8ff; /* Change border color on focus */
+        }
+
+        .login-form button {
+            background-color: #00d8ff;
+            color: black;
+            border: none;
+            padding: 15px;
+            width: 60%;
+            border-radius: 25px;
+            font-size: 1.2em; /* Increased font size */
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s; /* Smooth transition for hover effect */
+        }
+
+        .login-form button:hover {
+            background-color: #0099cc; /* Darker shade on hover */
+        }
+
+        .google-button {
+            background-color: #DB4437;
+            color: white;
+            padding: 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            border: none;
+            margin-top: 10px;
+            width: 60%;
+            font-size: 1.2em; /* Increased font size */
+            transition: background-color 0.3s; /* Smooth transition for hover effect */
+        }
+
+        .google-button:hover {
+            background-color: #c1351d; /* Darker shade on hover */
+        }
+
+        .signup-link {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #007bff;
+            cursor: pointer;
+            text-decoration: underline; /* Underline for emphasis */
+        }
+
+        .back-button {
+            background-color: #ccc;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background-color 0.3s; /* Smooth transition for hover effect */
+        }
+
+        .back-button:hover {
+            background-color: #bbb; /* Darker shade on hover */
+        }
+
+        .google-login {
+            display: flex; /* Use flexbox to center the button */
+            justify-content: center; /* Center the content */
+            margin: 10px 0; /* Add some margin for spacing */
+        }
+
+        /* Display User Information After Google Login */
+        #userInfo {
+            display: none;
+        }
+
+        #userEmail {
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 id="mainHeading">EVENT MANAGEMENT AND NOTIFICATION SYSTEM</h1>
+        <button class="get-started" id="getStartedButton" onclick="showRoleSelection()">GET STARTED</button>
+        <p class="footer-message">Door is open for you all to explore about any events.</p>
+
+        <div class="role-selection-container" id="roleSelectionContainer">
+            <h2>Select Your Role</h2>
+            <div class="role-buttons">
+                <button class="role-btn admin-btn" onclick="showLoginForm('admin')"><i>👤</i> Admin</button>
+                <button class="role-btn councilor-btn" onclick="showLoginForm('councilor')"><i>📋</i> Councilor</button>
+                <button class="role-btn club-secretary-btn" onclick="showLoginForm('clubSecretary')"><i>📂</i> Club Secretary</button>
+                <button class="role-btn staff-btn" onclick="showLoginForm('staff')"><i>👔</i> Staff</button>
+                <button class="role-btn student-btn" onclick="showLoginForm('student')"><i>🎓</i> Student</button>
+            </div>
+        </div>
+
+        <div class="login-form" id="adminLoginForm">
+            <h2>Admin Login</h2>
+            <input type="text" placeholder="Email" id="loginEmailAdmin" required>
+            <input type="password" placeholder="Password" id="loginPasswordAdmin" required>
+            <button class="btn login" onclick="window.location.href='mainInterface.html';">login</button>
+            <div class="google-login" id="adminGoogleLogin"></div>
+            <p class="signup-link" onclick="showRegistrationForm('admin')">I don't have an account. Sign Up</p>
+            <button class="back-button" onclick="backToRoleSelection()">Back</button>
+        </div>
+
+        <div class="login-form" id="councilorLoginForm">
+            <h2>Councilor Login</h2>
+            <input type="text" placeholder="Email" id="loginEmailCouncilor" required>
+            <input type="password" placeholder="Password" id="loginPasswordCouncilor" required>
+            <button class="btn login" onclick="window.location.href='mainInterface.html';">login</button>
+            <div class="google-login" id="councilorGoogleLogin"></div>
+            <p class="signup-link" onclick="showRegistrationForm('councilor')">I don't have an account. Sign Up</p>
+            <button class="back-button" onclick="backToRoleSelection()">Back</button>
+        </div>
+
+        <div class="login-form" id="clubSecretaryLoginForm">
+            <h2>Club Secretary Login</h2>
+            <input type="text" placeholder="Email" id="loginEmailClubSecretary" required>
+            <input type="password" placeholder="Password" id="loginPasswordClubSecretary" required>
+            <button class="btn login" onclick="window.location.href='mainInterface.html';">login</button>
+            <div class="google-login" id="clubSecretaryGoogleLogin"></div>
+            <p class="signup-link" onclick="showRegistrationForm('clubSecretary')">I don't have an account. Sign Up</p>
+            <button class="back-button" onclick="backToRoleSelection()">Back</button>
+        </div>
+
+        <div class="login-form" id="staffLoginForm">
+            <h2>Staff Login</h2>
+            <input type="text" placeholder="Email" id="loginEmailStaff" required>
+            <input type="password" placeholder="Password" id="loginPasswordStaff" required>
+            <button class="btn login" onclick="window.location.href='mainInterface.html';">login</button>
+            <div class="google-login" id="staffGoogleLogin"></div>
+            <p class="signup-link" onclick="showRegistrationForm('staff')">I don't have an account. Sign Up</p>
+            <button class="back-button" onclick="backToRoleSelection()">Back</button>
+        </div>
+
+        <div class="login-form" id="studentLoginForm">
+            <h2>Student Login</h2>
+            <input type="text" placeholder="Email" id="loginEmailStudent" required>
+            <input type="password" placeholder="Password" id="loginPasswordStudent" required>
+            <button class="btn login" onclick="window.location.href='mainInterface.html';">login</button>
+            <div class="google-login" id="studentGoogleLogin"></div>
+            <p class="signup-link" onclick="showRegistrationForm('student')">I don't have an account. Sign Up</p>
+            <button class="back-button" onclick="backToRoleSelection()">Back</button>
+        </div>
+
+        <div class="login-form" id="studentRegistrationForm">
+            <h2>Student Registration</h2>
+            <input type="text" placeholder="Email" id="studentEmail" required>
+            <input type="password" placeholder="Password" id="studentPassword" required>
+            <input type="text" placeholder="Phone Number" id="studentPhone" required>
+            <input type="text" placeholder="Student ID" id="studentID" required>
+            <button onclick="registerStudent()">Register</button>
+            <p class="signup-link" onclick="showLoginForm('student')">Already have an account? Login</p>
+            <button class="back-button" onclick="showLoginForm('student')">Back</button>
+        </div>
+
+        <div class="login-form" id="staffRegistrationForm">
+            <h2>Staff Registration</h2>
+            <input type="text" placeholder="Email" id="staffEmail" required>
+            <input type="password" placeholder="Password" id="staffPassword" required>
+            <input type="text" placeholder="Phone Number" id="staffPhone" required>
+            <input type="text" placeholder="Employee ID" id="staffID" required>
+            <button onclick="registerStaff()">Register</button>
+            <p class="signup-link" onclick="showLoginForm('staff')">Already have an account? Login</p>
+            <button class="back-button" onclick="showLoginForm('staff')">Back</button>
+        </div>
+
+        <div class="login-form" id="adminRegistrationForm">
+            <h2>Admin Registration</h2>
+            <input type="text" placeholder="Email" id="adminEmail" required>
+            <input type="password" placeholder="Password" id="adminPassword" required>
+            <input type="text" placeholder="Phone Number" id="adminPhone" required>
+            <button onclick="registerAdmin()">Register</button>
+            <p class="signup-link" onclick="showLoginForm('admin')">Already have an account? Login</p>
+            <button class="back-button" onclick="showLoginForm('admin')">Back</button>
+        </div>
+
+        <div class="login-form" id="councilorRegistrationForm">
+            <h2>Councilor Registration</h2>
+            <input type="text" placeholder="Email" id="councilorEmail" required>
+            <input type="password" placeholder="Password" id="councilorPassword" required>
+            <input type="text" placeholder="Phone Number" id="councilorPhone" required>
+            <input type="text" placeholder="Student ID" id="councilorStudentID" required>
+            <button onclick="registerCouncilor()">Register</button>
+            <p class="signup-link" onclick="showLoginForm('councilor')">Already have an account? Login</p>
+            <button class="back-button" onclick="showLoginForm('councilor')">Back</button>
+        </div>
+
+        <div class="login-form" id="clubSecretaryRegistrationForm">
+            <h2>Club Secretary Registration</h2>
+            <input type="text" placeholder="Email" id="clubSecretaryEmail" required>
+            <input type="password" placeholder="Password" id="clubSecretaryPassword" required>
+            <input type="text" placeholder="Phone Number" id="clubSecretaryPhone" required>
+            <input type="text" placeholder="Student ID" id="clubSecretaryStudentID" required>
+            <button onclick="registerClubSecretary()">Register</button>
+            <p class="signup-link" onclick="showLoginForm('clubSecretary')">Already have an account? Login</p>
+            <button class="back-button" onclick="showLoginForm('clubSecretary')">Back</button>
+        </div>
+
+        <!-- Display User Information After Google Login -->
+        <div id="userInfo" style="display: none;">
+            <h3>User Info</h3>
+            <p id="userEmail"></p> <!-- Display user's Google account email -->
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+    <script>
+        function hideAllForms() {
+            const forms = document.querySelectorAll('.login-form, .role-selection-container');
+            forms.forEach((form) => {
+                form.style.display = 'none'; // Hide all forms
+            });
+            document.getElementById('getStartedButton').style.display = 'none'; // Hide 'Get Started' button
+        }
+
+        function showRoleSelection() {
+            hideAllForms(); // Hide everything
+            document.getElementById('roleSelectionContainer').style.display = 'flex'; // Show role selection
+        }
+
+        function showLoginForm(role) {
+            hideAllForms(); // Hide all forms
+            const loginForm = document.getElementById(role + 'LoginForm'); // Construct ID based on role
+            if (loginForm) {
+                loginForm.style.display = 'block'; // Show the corresponding login form
+            }
+        }
+
+        function showRegistrationForm(role) {
+            hideAllForms(); // Hide all forms
+            const registrationForm = document.getElementById(role + 'RegistrationForm'); // Construct ID based on role
+            if (registrationForm) {
+                registrationForm.style.display = 'block'; // Show the corresponding registration form
+            }
+        }
+
+        function backToRoleSelection() {
+            hideAllForms(); // Hide all forms
+            document.getElementById('roleSelectionContainer').style.display = 'flex'; // Show role selection
+        }
+
+        function registerAdmin() {
+            alert('Admin registered successfully!');
+            showLoginForm('admin'); // Redirect to the Admin login form
+        }
+
+        function registerCouncilor() {
+            alert('Councilor registered successfully!');
+            showLoginForm('councilor'); // Redirect to the Councilor login form
+        }
+
+        function registerClubSecretary() {
+            alert('Club Secretary registered successfully!');
+            showLoginForm('clubSecretary'); // Redirect to the Club Secretary login form
+        }
+
+        function registerStaff() {
+            alert('Staff registered successfully!');
+            showLoginForm('staff'); // Redirect to the Staff login form
+        }
+
+        function registerStudent() {
+            alert('Student registered successfully!');
+            showLoginForm('student'); // Redirect to the Student login form
+        }
+
+        // Initialize Google Sign-In
+        function initializeGoogleSignIn() {
+            google.accounts.id.initialize({
+                client_id: 'YOUR_GOOGLE_CLIENT_ID', // Replace with your Google OAuth Client ID
+                callback: handleGoogleSignIn
+            });
+
+            // Render Google Sign-In buttons for each role
+            google.accounts.id.renderButton(
+                document.getElementById("staffGoogleLogin"),
+                { theme: "outline", size: "large" }
+            );
+            google.accounts.id.renderButton(
+                document.getElementById("studentGoogleLogin"),
+                { theme: "outline", size: "large" }
+            );
+            google.accounts.id.renderButton(
+                document.getElementById("adminGoogleLogin"),
+                { theme: "outline", size: "large" }
+            );
+            google.accounts.id.renderButton(
+                document.getElementById("councilorGoogleLogin"),
+                { theme: "outline", size: "large" }
+            );
+            google.accounts.id.renderButton(
+                document.getElementById("clubSecretaryGoogleLogin"),
+                { theme: "outline", size: "large" }
+            );
+        }
+
+        // Handle Google sign-in response
+        function handleGoogleSignIn(response) {
+            const userInfo = jwt_decode(response.credential);
+            document.getElementById('userEmail').textContent = 'Logged in as: ${userInfo.email}';
+            document.getElementById('userInfo').style.display = 'block';
+        }
+
+        // Load Google Sign-In when the window loads
+        window.onload = function () {
+            initializeGoogleSignIn();
+        }
+
+        function loginUser(role) {
+            displayLoginSuccess(); // Call this function to handle successful login
+        }
+
+        function displayLoginSuccess() {
+            document.body.innerHTML = ''; // Clear the body
+            // Menu Button
+            const menuButton = document.createElement('button');
+            menuButton.className = 'menu-button';
+            menuButton.onclick = openMenu;
+            menuButton.innerHTML = '☰ Menu';
+            document.body.appendChild(menuButton);
+
+            // Side menu (recreate for the welcome interface)
+            const sideMenu = document.createElement('div');
+            sideMenu.id = 'mySideMenu';
+            sideMenu.className = 'side-menu';
+            sideMenu.innerHTML = `
+                <span class="close-button" onclick="closeMenu()">×</span>
+                <a href="#">about us</a>
+                <a href="#">support us</a>
+                <a href="#">logout</a>
+            `;
+            document.body.appendChild(sideMenu);
+        }
+
+        function openMenu() {
+            document.getElementById("mySideMenu").style.width = "250px";
+        }
+
+        function closeMenu() {
+            document.getElementById("mySideMenu").style.width = "0";
+        }
+    </script>
+</body>
+
+</html>

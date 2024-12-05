@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Interface - Event Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e9ecef;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 90%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"], input[type="date"], input[type="time"], select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+            max-width: 250px;
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #007BFF; /* Button color */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3; /* Button hover color */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px 15px; 
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007BFF; /* Header color */
+            color: white;
+            cursor: pointer;
+        }
+
+        th:hover {
+            background-color: #0056b3; /* Header hover color */
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .close-btn {
+            cursor: pointer;
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+    
+        .footer {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 15px 0;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer-icon {
+            font-size: 26px;
+            color: #555;
+            cursor: pointer;
+            transition: color 0.3s, transform 0.2s;
+        }
+
+        .footer-icon:hover {
+            color:#0056b3;
+            transform: scale(1.1);
+        }
+
+        .details-container {
+            display: none; /* Start off hidden */
+            margin: 20px auto; /* Center the details section */
+            padding: 20px; /* Add padding */
+            background: #ffffff; /* White background for clarity */
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px; /* Set a maximum width for better readability */
+        }
+
+        .details-header {
+            background: #007BFF;
+            color: white;
+            padding: 15px; /* Less padding for the header */
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 20px; /* Space between header and details */
+        }
+
+        .event-details {
+            padding: 10px; /* Padding around event details */
+        }
+
+        /* Adjusting margins in paragraphs for better spacing */
+        .event-details p {
+            margin: 15px 0; /* Increased spacing for paragraphs */
+            line-height: 1.5; /* Improved line height for readability */
+        }
+
+        /* CSS for spacing in the modal */
+        .modal-content form {
+            display: flex;
+            flex-direction: column; /* Vertical layout */
+        }
+
+        .modal-content form label {
+            margin-top: 10px; /* Spacing above labels */
+        }
+
+        .modal-content form input, 
+        .modal-content form textarea {
+            margin-top: 5px; /* Spacing above inputs */
+            margin-bottom: 15px; /* Spacing below inputs for better separation */
+        }
+
+        .modal-content form textarea {
+            resize: vertical; /* Allow vertical resizing */
+            min-height: 60px; /* Set minimum height for text area */
+        }
+
+        @media (max-width: 600px) {
+            .modal-content, .details-container {
+                width: 90%; /* Responsive width for mobile */
+            }
+        }
+
+        .history-btn {
+            font-size: 18px;
+            color: #007bff;
+            cursor: pointer;
+            background: none;
+            border: none;
+            outline: none;
+        }
+
+        .event-history {
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+
+        .event-history li {
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .search-input-container {
+            position: relative;
+            width: 100%;
+            max-width: 250px; /* Same max-width as your input */
+        }
+
+        .search-input-container input[type="text"] {
+            padding-right: 20px; /* Add padding for the icon */
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 10px; /* Position it inside the input */
+            top: 50%;
+            transform: translateY(-50%); /* Center vertically */
+            color: #007BFF; /* Change icon color if needed */
+            pointer-events: none; /* Prevent clicks on the icon */
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="main-container">
+        <h2>Event Management - Culture</h2>
+
+        <div class="search-container">
+            <div class="search-input-container">
+                <input type="text" id="search-bar" placeholder="Search by date, event, or venue..." onkeyup="filterEvents()">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+            <button class="history-btn" onclick="openModal()">
+                <i class="fas fa-history"></i> History
+            </button>
+        </div>
+    
+        <!-- Modal for Event History -->
+        <div class="modal" id="historyModal">
+            <div class="modal-content">
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+                <h2>Event History</h2>
+                <ul class="event-history">
+                    <li>Checked in habit on 2024-11-01</li>
+                    <li>Skipped habit on 2024-11-02</li>
+                    <li>Completed habit on 2024-11-03</li>
+                    <!-- Add more event items as needed -->
+                </ul>
+            </div>
+        </div>
+
+        <table id="event-table">
+            <thead>
+                <tr>
+                    <th onclick="sortTable(0)">Date <i class="fas fa-sort"></i></th>
+                    <th onclick="sortTable(1)">Event List <i class="fas fa-sort"></i></th>
+                    <th onclick="sortTable(2)">Venue <i class="fas fa-sort"></i></th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Event rows will be dynamically inserted here -->
+            </tbody>
+        </table>
+
+        <div class="button-container" style="text-align: center; margin-top: 20px;">
+            <button id="add-btn">Add Event</button>
+        </div>
+
+        <div class="footer">
+            <span class="footer-icon" onclick="window.location.href='event_Type.html';"> 
+                <i class="fas fa-arrow-left"></i>
+            </span>
+            <a href="login.html" style="text-decoration: none; color: inherit; margin: 0 20px;"> 
+                <span class="footer-icon">
+                    <i class="fas fa-home"></i>
+                </span>
+            </a>
+        </div>        
+    </div>
+
+    <!-- Event Modal -->
+    <div id="event-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="close-modal">×</span>
+            <h3 id="modal-title">Add New Event</h3>
+            <form id="event-form">
+                <input type="hidden" id="event-index">
+                <label for="event-name">Event Name:</label>
+                <input type="text" id="event-name" required>
+                
+                <label for="event-venue">Venue:</label>
+                <input type="text" id="event-venue" required>
+                
+                <label for="event-date">Date:</label>
+                <input type="date" id="event-date" required>
+                
+                <label for="event-time">Time:</label>
+                <input type="time" id="event-time" required>
+                
+                <button type="submit" id="save-btn">Save Event</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="details-container" id="event-details">
+        <div class="details-header">
+            <h2>Event Details</h2>
+        </div>
+        <div class="event-details" id="event-details-content">
+            <!-- Event details will be inserted here -->
+        </div>
+        <button onclick="backToMain()">Back to Events</button>
+    </div>
+
+    <script>
+        // JavaScript functions here
+        const events = [];
+
+        document.getElementById('add-btn').onclick = function () {
+            openEventModal();
+        };
+
+        document.getElementById('close-modal').onclick = function () {
+            closeEventModal();
+        };
+
+        document.getElementById('event-form').onsubmit = function (e) {
+            e.preventDefault();
+            saveEvent();
+        };
+
+        function openModal() {
+            document.getElementById("historyModal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("historyModal").style.display = "none";
+        }
+
+        function openEventModal(index = null) {
+            document.getElementById('event-modal').style.display = 'flex';
+            if (index !== null) {
+                const event = events[index];
+                document.getElementById('event-name').value = event.name;
+                document.getElementById('event-venue').value = event.venue;
+                document.getElementById('event-date').value = event.date;
+                document.getElementById('event-time').value = event.time;
+                document.getElementById('event-index').value = index;
+                document.getElementById('modal-title').innerText = 'Edit Event';
+            } else {
+                document.getElementById('event-form').reset();
+                document.getElementById('modal-title').innerText = 'Add New Event';
+            }
+        }
+
+        function closeEventModal() {
+            document.getElementById('event-modal').style.display = 'none';
+        }
+
+        function saveEvent() {
+            const index = document.getElementById('event-index').value;
+            const name = document.getElementById('event-name').value;
+            const venue = document.getElementById('event-venue').value;
+            const date = document.getElementById('event-date').value;
+            const time = document.getElementById('event-time').value;
+
+            const eventData = { name, venue, date, time };
+
+            if (index) {
+                events[index] = eventData;
+            } else {
+                events.push(eventData);
+            }
+
+            closeEventModal();
+            displayEvents();
+        }
+
+        function displayEvents() {
+            const tableBody = document.querySelector("#event-table tbody");
+            tableBody.innerHTML = "";
+            events.forEach((event, index) => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${event.date}</td>
+                    <td>${event.name}</td>
+                    <td>${event.venue}</td>
+                    <td>
+                        <button onclick="openEventModal(${index})">Edit</button>
+                        <button onclick="deleteEvent(${index})">Delete</button>
+                        <button onclick="viewEventDetails(${index})">View</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function deleteEvent(index) {
+            events.splice(index, 1);
+            displayEvents();
+        }
+
+        function viewEventDetails(index) {
+            document.getElementById('main-container').style.display = 'none';
+            document.getElementById('event-details').style.display = 'block';
+
+            const event = events[index];
+            document.getElementById('event-details-content').innerHTML = `
+                <p><strong>Name:</strong> ${event.name}</p>
+                <p><strong>Venue:</strong> ${event.venue}</p>
+                <p><strong>Date:</strong> ${event.date}</p>
+                <p><strong>Time:</strong> ${event.time}</p>
+            `;
+        }
+
+        function backToMain() {
+            document.getElementById('main-container').style.display = 'block';
+            document.getElementById('event-details').style.display = 'none';
+        }
+
+        function filterEvents() {
+            const query = document.getElementById("search-bar").value.toLowerCase();
+            const rows = document.querySelectorAll("#event-table tbody tr");
+            rows.forEach(row => {
+                const rowText = row.innerText.toLowerCase();
+                row.style.display = rowText.includes(query) ? "" : "none";
+            });
+        }
+
+        function sortTable(columnIndex) {
+            const table = document.getElementById("event-table");
+            let switching = true;
+            let dir = "asc";
+            let switchCount = 0;
+
+            while (switching) {
+                switching = false;
+                const rows = table.rows;
+                for (let i = 1; i < rows.length - 1; i++) {
+                    let shouldSwitch = false;
+                    const x = rows[i].getElementsByTagName("TD")[columnIndex];
+                    const y = rows[i + 1].getElementsByTagName("TD")[columnIndex];
+
+                    if (dir === "asc") {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (dir === "desc") {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    switchCount++;
+                } else {
+                    if (switchCount === 0 && dir === "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Feedback Viewer</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            margin-top: 100px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            text-align: center;
+            color: #343a40;
+            margin-bottom: 20px;
+        }
+
+        .feedback-box {
+            background-color: #e9ecef;
+            padding: 15px;
+            border: 1px solid #ced4da;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            color: #495057;
+        }
+
+        .feedback-section {
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-load {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-load:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Main Content -->
+    <div class="container">
+        <header>
+            <h1>View User Feedback</h1>
+        </header>
+        <section class="feedback-section">
+            <div id="feedback-list">
+                <!-- Feedback will be dynamically loaded here -->
+            </div>
+            <div class="text-center mt-4">
+                <button class="btn-load" onclick="loadFeedback()">Load Feedback</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Include Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- <script>
+        // Function to load feedback from localStorage and display it
+        function loadFeedback() {
+            var feedbackList = JSON.parse(localStorage.getItem('userFeedback')) || [];
+            var feedbackContainer = document.getElementById('feedback-list');
+            feedbackContainer.innerHTML = ""; // Clear previous feedback
+
+            // Display each feedback item
+            feedbackList.forEach(function(feedback, index) {
+                var feedbackElement = document.createElement('div');
+                feedbackElement.classList.add('feedback-box');
+                feedbackElement.textContent = `Feedback #${index + 1}: ${feedback}`;
+                feedbackContainer.appendChild(feedbackElement);
+            });
+
+            // If no feedback, show a message
+            if (feedbackList.length === 0) {
+                feedbackContainer.innerHTML = "<p class='feedback-box'>No feedback available.</p>";
+            }
+        }
+    </script> -->
+        <!-- JavaScript -->
+        <script>
+            function loadFeedback() {
+                const feedbackList = JSON.parse(localStorage.getItem('userFeedback')) || [];
+                const feedbackContainer = document.getElementById('feedback-list');
+    
+                // Clear existing feedback
+                feedbackContainer.innerHTML = '';
+    
+                if (feedbackList.length === 0) {
+                    feedbackContainer.innerHTML = '<div class="feedback-box">No feedback available.</div>';
+                    return;
+                }
+    
+                // Render each feedback item
+                feedbackList.forEach((feedback, index) => {
+                    const feedbackElement = document.createElement('div');
+                    feedbackElement.classList.add('feedback-box');
+                    feedbackElement.textContent = `Feedback #${index + 1}: ${feedback}`;
+                    feedbackContainer.appendChild(feedbackElement);
+                });
+            }
+        </script>
+</body>
+</html>

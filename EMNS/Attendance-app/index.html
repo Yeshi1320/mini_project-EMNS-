@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance App</title>
+</head>
+<body>
+    <h1>Attendance App</h1>
+    
+    <!-- Course Dropdown -->
+    <label for="courseDropdown">Select Course:</label>
+    <select id="courseDropdown" onchange="fetchStudents()">
+        <option value="">Select a course</option>
+        <option value="1">D2CSN</option>
+        <option value="2">D1CSN</option>
+        <option value="3">D2ME</option>
+    </select>
+
+    <!-- Student List -->
+    <h2>Students</h2>
+    <ul id="studentList"></ul>
+
+    <script src="script.js"></script>
+</body>
+</html>

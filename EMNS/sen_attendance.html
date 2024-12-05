@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course-based Student Attendance</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .attendance-container {
+            width: 90%;
+            max-width: 600px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 30px 0;
+            text-align: center;
+        }
+        select, table, button {
+            width: 100%;
+            margin-top: 15px;
+        }
+        select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        table {
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+        button {
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:disabled {
+            background-color: #aaa;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="attendance-container">
+    <h2>Course-based Student Attendance</h2>
+
+    <!-- Course Selection -->
+    <label for="course">Select a Course:</label>
+    <select id="course">
+        <option value="">-- Select Course --</option>
+        <option value="D2CSN">D2CSN</option>
+        <option value="ME">ME</option>
+        <option value="DMPM">DMPM</option>
+    </select>
+
+    <!-- File Upload -->
+    <label for="file-upload">Upload Student CSV File:</label>
+    <input type="file" id="file-upload" accept=".csv" onchange="importStudentList()">
+
+    <!-- Attendance Table -->
+    <table id="attendance-table">
+        <thead>
+            <tr>
+                <th>Student ID</th>
+                <th>Student Name</th>
+                <th>Present</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script>
+    function importStudentList() {
+        const fileInput = document.getElementById('file-upload');
+        const courseSelect = document.getElementById('course');
+        const selectedCourse = courseSelect.value;
+
+        if (!selectedCourse) {
+            alert('Please select a course before uploading a file.');
+            return;
+        }
+
+        const file = fileInput.files[0];
+        if (!file) {
+            alert('Please select a CSV file to upload.');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const fileContent = e.target.result;
+            const rows = fileContent.split('\n').map(row => row.trim()).filter(row => row);
+            const tbody = document.querySelector('#attendance-table tbody');
+            tbody.innerHTML = ''; // Clear previous rows
+
+            rows.forEach(row => {
+                const [studentID, studentName] = row.split(',');  // Split the CSV row into ID and Name
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${studentID.trim()}</td><td>${studentName.trim()}</td>
+                                <td><input type="checkbox" class="attendance-checkbox"></td>`;
+                tbody.appendChild(tr);
+            });
+
+            alert(`${rows.length} students added to the table.`);
+        };
+
+        reader.readAsText(file);
+    }
+</script>
+
+</body>
+</html>

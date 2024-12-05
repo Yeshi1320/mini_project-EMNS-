@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/EMNS/stylesheet/event_Type.css">
+    <link rel="stylesheet" href="/EMNS/stylesheet/menu.css">
+    <style>
+        /* General Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #73b7e3, #b5e0e3);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            backdrop-filter: brightness(0.9);
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .menu-button,
+        .user-icon {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #333;
+            font-size: 32px; /* Increase icon size */
+            padding: 10px; /* Add padding for larger clickable area */
+        }
+
+        /* Profile Dropdown Styles */
+        .profile-dropdown,
+        .menu-dropdown {
+            position: fixed;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            width: 250px;
+            z-index: 1000;
+            display: none; /* Hide by default */
+        }
+
+        .menu-dropdown {
+            top: 70px; /* Position the menu below the top nav */
+            left: 20px; /* Align to the left */
+        }
+
+        .profile-dropdown {
+            top: 70px; /* Position the profile dropdown below the user icon */
+            right: 20px; /* Align with the user button on the right */
+        }
+
+        .profile-dropdown .dropdown-item,
+        .menu-dropdown .dropdown-item {
+            padding: 10px 20px;
+            color: #333;
+        }
+
+        .profile-dropdown .dropdown-item:hover,
+        .menu-dropdown .dropdown-item:hover {
+            background-color: #f8f8f8;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+        }
+
+        .profile-header img {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            margin-right: 15px;
+        }
+
+        /* Button Container */
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 40px;
+            gap: 20px;
+            padding: 0 20px;
+        }
+
+        /* Footer Section */
+        .footer {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 15px 0;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer-icon {
+            font-size: 26px;
+            color: #555;
+            cursor: pointer;
+            transition: color 0.3s, transform 0.2s;
+        }
+
+        .footer-icon:hover {
+            color: #ff4081;
+            transform: scale(1.1);
+        }
+
+        /* Event Type Interface */
+        .event-type-interface {
+            display: block; /* Show it by default */
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            margin: 20px;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .event-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .event-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer; /* Indicate clickability */
+        }
+
+        .event-card img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .event-card p {
+            margin-top: 10px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        /* Event Detail Interface */
+        .event-detail-interface {
+            display: none; /* Hide by default */
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            margin: 20px;
+            text-align: center;
+        }
+
+        /* Hide cards with 'hidden' class */
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Top Navigation -->
+    <div class="top-nav">
+        <button class="menu-button" id="menuButton">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="button-wrapper" style="display: flex; align-items: center; gap: 10px;">
+            <h1 style="margin: 0;">Event Type</h1>
+        </div>
+        <button class="user-icon" id="profileButton">
+            <i class="fas fa-user"></i>
+        </button>
+    </div>
+
+    <!-- Profile Dropdown -->
+    <!-- Profile Dropdown -->
+    <div class="profile-dropdown" id="profileDropdown">
+        <div class="profile-header">
+            <div class="avatar">S</div>
+            <div class="profile-details">
+                <h2>Sonam Pelden</h2>
+                <p class="email">05230135.jnec@rub.edu.bt</p>
+            </div>
+        </div>
+        <div class="profile-info">
+            <div class="info-item">
+                <i class="fas fa-sync-alt"></i> Sync is on
+            </div>
+            <div class="info-item">
+                <i class="fas fa-cogs"></i> <a href="#">Manage your Google Account</a>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-users"></i> <a href="#">Other Profiles</a>
+            </div>
+        </div>
+    
+        <!-- Other Profiles Section with "+ Add Profile" Button -->
+        <div class="other-profiles">
+            <h3>Other Profiles</h3>
+            <div class="profile-list">
+                <p>Person 1</p>
+                <p>Person 2</p>
+            </div>
+            <!-- Add Profile Button -->
+            <button class="add-profile-btn"><a href="login.html">+ Add Profile</a></button>
+        </div>
+
+        <div class="profile-footer">
+            <button class="logout"><a href="login.html">Logout</a></button>
+        </div>
+        
+    </div>
+    
+    <!-- Menu Dropdown -->
+    <div class="menu-dropdown" id="menuDropdown">
+        <a class="dropdown-item" href="support.html">Support Us</a>
+        <a class="dropdown-item" href="about_us.html">About Us</a>
+    </div>
+
+    <!-- Event Type Interface -->
+    <div class="event-type-interface" id="eventTypeInterface">
+        <h2 style="text-align: center;">Events Awaiting Your Discovery!</h2>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search for event types..." />
+        </div>
+        <div class="event-grid" id="eventGrid">
+            <!-- Event Cards -->
+            <div class="event-card" data-name="Cultural">
+                <img src="picture/cultural.jpg" alt="Cultural Event" onclick="window.location.href='history.html';"/>
+                <p>Cultural</p>
+            </div>
+            <div class="event-card" data-name="Sport">
+                <img src="picture/sports.jpeg" alt="Sport Event" />
+                <p>Sport</p>
+            </div>
+            <div class="event-card" data-name="Work Program">
+                <img src="picture/work.jpg" alt="Work Program" onclick="window.location.href='event_work.html';"/>
+                <p>Work Program</p>
+            </div>
+            <div class="event-card" data-name="Workshop">
+                <img src="picture/workshop.jpg" alt="Workshop" />
+                <p>Workshop</p>
+            </div>
+            <div class="event-card" data-name="Others">
+                <img src="picture/relegious.jpg" alt="Others" />
+                <p>Others</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Event Detail Interface -->
+    <div class="event-detail-interface" id="eventDetailInterface">
+        <h2 id="eventDetailTitle" style="text-align: center;"></h2>
+        <img id="eventDetailImage" style="width: 200px; display: block; margin: 0 auto;" />
+        <p id="eventDetailDescription" style="text-align: center;"></p>
+    </div>
+
+    <!-- Footer Section -->
+    <div class="footer">
+        <i class="fas fa-arrow-left footer-icon" id="backButton" onclick="window.location.href='mainInterface.html';"></i>
+        <a href="login.html" style="text-decoration: none; color: inherit;">
+            <i class="fas fa-home footer-icon"></i>
+        </a>
+        <i class="fas fa-arrow-right footer-icon" id="forwardButton" style="display: none;" onclick="window.location.href='history.html';"></i> <!-- Keep it but hidden by default -->
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="/javaScript/event_type.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#profileButton').on('click', function () {
+                $('#profileDropdown').toggle();
+                $('#menuDropdown').hide(); // Hide menu dropdown if open
+                $('#eventTypeInterface').show(); // Ensure event type interface is shown
+                $('#eventDetailInterface').hide(); // Ensure event detail interface is hidden
+                $('#forwardButton').hide(); // Hide forward button on main interface
+            });
+
+            $('#menuButton').on('click', function () {
+                $('#menuDropdown').toggle();
+                $('#profileDropdown').hide(); // Hide profile dropdown if open
+                $('#eventTypeInterface').show(); // Ensure event type interface is shown
+                $('#eventDetailInterface').hide(); // Ensure event detail interface is hidden
+                $('#forwardButton').hide(); // Hide forward button on main interface
+            });
+
+            // Close dropdowns when clicking outside
+            $(document).on('click', function (e) {
+                if (!$(e.target).closest('#profileDropdown, #profileButton').length) {
+                    $('#profileDropdown').hide();
+                }
+                if (!$(e.target).closest('#menuDropdown, #menuButton').length) {
+                    $('#menuDropdown').hide();
+                }
+            });
+
+            // Search functionality
+            $('#searchInput').on('input', function () {
+                const filter = $(this).val().toLowerCase();
+                $('.event-card').each(function () {
+                    const name = $(this).data('name').toLowerCase();
+                    $(this).toggle(name.includes(filter)); // Show or hide based on match
+                });
+            });
+
+            // Click event for event cards
+            $('.event-card').on('click', function () {
+                const name = $(this).data('name');
+                const imgSrc = $(this).find('img').attr('src');
+                let description;
+
+                // Set event description based on the event type
+                switch (name) {
+                    case 'Cultural':
+                        description = 'Explore various cultural events happening near you.';
+                        break;
+                    case 'Sport':
+                        description = 'Join us in exciting sports events for everyone.';
+                        break;
+                    case 'Work Program':
+                        description = 'Participate in various work programs for skill development.';
+                        break;
+                    case 'Workshop':
+                        description = 'Attend workshops to learn new skills and knowledge.';
+                        break;
+                    case 'Others':
+                        description = 'Check out other unique events!';
+                        break;
+                    default:
+                        description = 'More details coming soon.';
+                }
+
+                // Set the event details in the new interface
+                $('#eventDetailTitle').text(name);
+                $('#eventDetailImage').attr('src', imgSrc);
+                $('#eventDetailDescription').text(description);
+                
+                // Hide the event type interface and show the event detail interface
+                $('#eventTypeInterface').hide();
+                $('#eventDetailInterface').show();
+                $('#forwardButton').show(); // Show forward button when on event detail page
+            });
+
+            // Back to previous event type
+            $('#backButton').on('click', function() {
+                if ($('#eventDetailInterface').is(':visible')) {
+                    $('#eventDetailInterface').hide();
+                    $('#eventTypeInterface').show();
+                    $('#forwardButton').hide(); // Hide forward button when back to event type
+                }
+            });
+
+            // Forward functionality (for demonstration, you could implement specific functionality)
+            $('#forwardButton').on('click', function() {
+                // Implement functionality to navigate to the respective event type
+                // Here, just an alert to indicate functionality
+                alert("Forward functionality is currently not implemented.");
+            });
+        });
+    </script>
+</body>
+
+</html>

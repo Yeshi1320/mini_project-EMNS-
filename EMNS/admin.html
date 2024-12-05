@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #2c3e50;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding-top: 20px;
+            padding-left: 20px;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 10px;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #34495e;
+        }
+
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+
+        .content h1 {
+            color: #34495e;
+        }
+
+        .panel {
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .panel h3 {
+            margin-top: 0;
+            color: #34495e;
+        }
+
+        .panel table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .panel table, .panel th, .panel td {
+            border: 1px solid #ddd;
+        }
+
+        .panel th, .panel td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        .panel th {
+            background-color: #34495e;
+            color: white;
+        }
+
+        .button {
+            padding: 8px 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 5px; /* Space between buttons */
+        }
+
+        .button:hover {
+            background-color: #2980b9;
+        }
+
+        /* Hide all panels initially */
+        .panel-container {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>Admin Panel</h2>
+        <a href="#" onclick="showPanel('dashboard')">Dashboard</a>
+        <a href="#" onclick="showPanel('manage-users')">Manage Users</a>
+        <a href="event_Type.html" onclick="showPanel('monitor-events')">Monitor Events</a>
+        <a href="#" onclick="showPanel('reported-issues')">Reported Issues</a>
+        <a href="login.html" onclick="logout()">Log Out</a>
+    </div>
+
+    <div class="content">
+        <h1>Admin Dashboard</h1>
+
+        <!-- User Management Panel -->
+        <div id="manage-users" class="panel-container">
+            <div class="panel">
+                <h3>Manage Users</h3>
+                
+                <table>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>john_doe</td>
+                        <td>john@example.com</td>
+                        <td>Active</td>
+                        <td>
+                            <button class="button" onclick="editUser(1)">Edit</button>
+                            <button class="button" onclick="deleteUser(1)">Delete</button>
+                            <button class="button" onclick="addUser(1)">Add</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>jane_smith</td>
+                        <td>jane@example.com</td>
+                        <td>Inactive</td>
+                        <td>
+                            <button class="button" onclick="editUser(2)">Edit</button>
+                            <button class="button" onclick="deleteUser(2)">Delete</button>
+                            <button class="button" onclick="addUser(2)">Add</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Event Monitoring Panel -->
+        <div id="monitor-events" class="panel-container">
+            <div class="panel">
+                <h3>Monitor Events</h3>
+                <table>
+                    <tr>
+                        <th>Event ID</th>
+                        <th>Event Name</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>System Update</td>
+                        <td>2024-12-01</td>
+                        <td>Completed</td>
+                        <td>
+                            <button class="button" onclick="viewEvent(1)">View</button>
+                            <button class="button" onclick="deleteEvent(1)">Delete</button>
+                            <button class="button" onclick="addEvent(1)">Add</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Security Patch</td>
+                        <td>2024-12-05</td>
+                        <td>Pending</td>
+                        <td>
+                            <button class="button" onclick="viewEvent(2)">View</button>
+                            <button class="button" onclick="deleteEvent(2)">Delete</button>
+                            <button class="button" onclick="addEvent(2)">Add</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Reported Issues Panel -->
+         
+        <div id="reported-issues" class="panel-container">
+            <div class="panel"> 
+                <h3><a href="admin_feedback.html"> Viewing Feedback</a></h3>
+            </div>
+        </div>
+        
+
+        <!-- Settings Panel -->
+        <div id="settings" class="panel-container">
+            <div class="panel">
+                <h3>Settings</h3>
+                <p>Settings content goes here...</p>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="panel-container">
+            <div class="panel">
+                <h3>Dashboard Overview</h3>
+                <p>Welcome to the Admin Dashboard. Here you can manage users, monitor events, and view reported issues.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to show the appropriate panel and hide others
+        function showPanel(panelId) {
+            // Hide all panels
+            const panels = document.querySelectorAll('.panel-container');
+            panels.forEach(panel => {
+                panel.style.display = 'none';
+            });
+            
+            // Show selected panel
+            document.getElementById(panelId).style.display = 'block';
+        }
+
+        // Function to handle logout
+        function logout() {
+            alert('Logging out...');
+            // Logic for logout can be implemented here
+            // For demo purposes, we just show an alert
+        }
+
+        // Function to handle adding a new user
+        function addUser(userId) {
+            alert('Add functionality for user ID: ' + userId);
+            // You could implement the logic to add new user details here
+        }
+
+        // Function to handle editing a user
+        function editUser(userId) {
+            alert('Edit functionality for user ID: ' + userId);
+            // Implement the logic for editing a user here
+        }
+
+        // Function to handle deleting a user
+        function deleteUser(userId) {
+            alert('Delete functionality for user ID: ' + userId);
+            // Implement the logic for deleting a user here
+        }
+
+        // Function to handle viewing an event
+        function viewEvent(eventId) {
+            alert('View functionality for event ID: ' + eventId);
+            // Implement the logic for viewing an event here
+        }
+
+        // Function to handle adding a new event
+        function addEvent(eventId) {
+            alert('Add functionality for event ID: ' + eventId);
+            // Implement the logic to add a new event here
+        }
+
+        // Function to handle deleting an event
+        function deleteEvent(eventId) {
+            alert('Delete functionality for event ID: ' + eventId);
+            // Implement the logic for deleting an event here
+        }
+
+        // Show the dashboard by default
+        window.onload = function() {
+            showPanel('dashboard');
+        }
+    </script>
+
+</body>
+</html>

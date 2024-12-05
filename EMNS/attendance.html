@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course-based Student Attendance</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+        .attendance-container {
+            width: 80%;
+            max-width: 600px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+            text-align: center;
+            margin-bottom: 0.1px;
+        }
+        select, table, button {
+            width: 100%;
+            margin-top: 20px;
+        }
+        table {
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        th {
+            background-color: #f0f0f0;
+        }
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .hidden {
+            display: none;
+        }
+        .footer {
+            width: 45%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+        }
+        .footer-icon {
+            font-size: 26px;
+            color: #555;
+            cursor: pointer;
+            transition: color 0.3s, transform 0.2s;
+        }
+        .footer-icon:hover {
+            color: #0056b3;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+
+<div class="attendance-container">
+    <h2>Student Attendance</h2>
+    <label for="course">Select a Course:</label>
+    <select id="course" onchange="showAttendanceTable()">
+        <option value="">-- Select Course --</option>
+        <option value="D2CSN">D2CSN</option>
+        <option value="me">ME</option>
+        <option value="dmpm">DMPM</option>
+    </select>
+
+    <div id="D2CSN-table" class="attendance-table hidden">
+        <table>
+            <thead>
+                <tr><th>Student Name</th><th>Present</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Anisha Chhetri</td><td><input type="checkbox" name="attendance" value="Anisha Chhetri"></td></tr>
+                <tr><td>Bipana Rai</td><td><input type="checkbox" name="attendance" value="Bipana Rai"></td></tr>
+                <tr><td>Choden</td><td><input type="checkbox" name="attendance" value="Choden"></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="me-table" class="attendance-table hidden">
+        <table>
+            <thead>
+                <tr><th>Student Name</th><th>Present</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Michael Brown</td><td><input type="checkbox" name="attendance" value="Michael Brown"></td></tr>
+                <tr><td>Emily White</td><td><input type="checkbox" name="attendance" value="Emily White"></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="dmpm-table" class="attendance-table hidden">
+        <table>
+            <thead>
+                <tr><th>Student Name</th><th>Present</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Chris Green</td><td><input type="checkbox" name="attendance" value="Chris Green"></td></tr>
+                <tr><td>Alice Blue</td><td><input type="checkbox" name="attendance" value="Alice Blue"></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button onclick="exportToExcel()">Submit & Export Attendance</button>
+</div>
+
+<div class="footer">
+    <span class="footer-icon" onclick="goBack();" style="margin-right: 20px;"> 
+        <i class="fas fa-arrow-left"></i>
+    </span>
+    <span class="footer-icon"> 
+        <i class="fas fa-home"></i>
+    </span>
+</div>
+
+<!-- Include SheetJS library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<script>
+    function showAttendanceTable() {
+        document.querySelectorAll('.attendance-table').forEach(table => table.classList.add('hidden'));
+        const course = document.getElementById('course').value;
+        if (course) {
+            document.getElementById(course + '-table').classList.remove('hidden');
+        }
+    }
+
+    function goBack() {
+        window.history.back();
+    }
+
+    function exportToExcel() {
+        const selectedCourse = document.getElementById('course').value;
+        if (!selectedCourse) {
+            alert("Please select a course.");
+            return;
+        }
+
+        const table = document.getElementById(selectedCourse + '-table');
+        const rows = Array.from(table.querySelectorAll('tbody tr'));
+
+        const data = [["Student Name", "Present"]];
+        rows.forEach(row => {
+            const name = row.querySelector('td:first-child').innerText;
+            const present = row.querySelector('input[type="checkbox"]').checked ? "Yes" : "No";
+            data.push([name, present]);
+        });
+
+        const worksheet = XLSX.utils.aoa_to_sheet(data);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Attendance");
+
+        XLSX.writeFile(workbook, "attendance.xlsx");
+    }
+</script>
+
+</body>
+</html>

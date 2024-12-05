@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Management and Notification System</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <link rel="stylesheet" href="/EMNS/stylesheet/Login_main.css">
+    <link rel="stylesheet" href="/EMNS/stylesheet/menu.css">
+</head>
+<body>
+    <div class="container">
+        <h1 id="mainHeading">EVENT MANAGEMENT AND NOTIFICATION SYSTEM</h1>
+        <button class="get-started" id="getStartedButton" onclick="showRoleSelection()">GET STARTED</button>
+        <p class="footer-message">Door is open for you all to explore about any events.</p>
+
+        <div class="role-selection-container" id="roleSelectionContainer">
+            <h2>Select Your Role</h2>
+            <div class="role-buttons">
+                <button class="role-btn admin-btn" onclick="showLoginForm('admin')"><i>👤</i> Admin</button>
+                <button class="role-btn councilor-btn" onclick="showLoginForm('councilor')"><i>📋</i> Councilor</button>
+                <button class="role-btn club-secretary-btn" onclick="showLoginForm('clubSecretary')"><i>📂</i> Club Secretary</button>
+                <button class="role-btn staff-btn" onclick="showLoginForm('staff')"><i>👔</i> Staff</button>
+                <button class="role-btn student-btn" onclick="showLoginForm('student')"><i>🎓</i> Student</button>
+            </div>
+        </div>
+
+        <div class="login-form" id="adminLoginForm">
+            <h2>Admin Login</h2>
+            <input type="text" placeholder="Email" id="loginEmailAdmin" required>
+            <input type="password" placeholder="Password" id="loginPasswordAdmin" required>
+            <button class="btn login" onclick="window.location.href='admin.html';">login</button>
+            <div class="google-login" id="adminGoogleLogin"></div>
+            <p class="signup-link" onclick="showRegistrationForm('admin')">I don't have an account. Sign Up</p>
+            <button class="back-button" onclick="backToRoleSelection()">Back</button>
+        </div>
+
+        <div class="login-form" id="councilorLoginForm">
+            <h2>Councilor Login</h2>
+            <input type="text" placeholder="Email" id="loginEmailCouncilor" required>
+            <input type="password" placeholder="Password" id="loginPasswordCouncilor" required>
+            <button class="btn login" onclick="window.location.href='mainInterface.html';">login</button>
+            <div class="google-login" id="councilorGoogleLogin"></div>
+            <p class="signup-link" onclick="showRegistrationForm('councilor')">I don't have an account. Sign Up</p>
+            <button class="back-button" onclick="backToRoleSelection()">Back</button>
+        </div>
+
+        <div class="login-form" id="clubSecretaryLoginForm">
+            <h2>Club Secretary Login</h2>
+            <input type="text" placeholder="Email" id="loginEmailClubSecretary" required>
+            <input type="password" placeholder="Password" id="loginPasswordClubSecretary" required>
+            <button class="btn login" onclick="window.location.href='mainInterface.html';">login</button>
+            <div class="google-login" id="clubSecretaryGoogleLogin"></div>
+            <p class="signup-link" onclick="showRegistrationForm('clubSecretary')">I don't have an account. Sign Up</p>
+            <button class="back-button" onclick="backToRoleSelection()">Back</button>
+        </div>
+
+        <div class="login-form" id="staffLoginForm">
+            <h2>Staff Login</h2>
+            <input type="text" placeholder="Email" id="loginEmailStaff" required>
+            <input type="password" placeholder="Password" id="loginPasswordStaff" required>
+            <button class="btn login" onclick="window.location.href='user_main.html';">login</button>
+            <div class="google-login" id="staffGoogleLogin"></div>
+            <p class="signup-link" onclick="showRegistrationForm('staff')">I don't have an account. Sign Up</p>
+            <button class="back-button" onclick="backToRoleSelection()">Back</button>
+        </div>
+
+        <div class="login-form" id="studentLoginForm">
+            <h2>Student Login</h2>
+            <input type="text" placeholder="Email" id="loginEmailStudent" required>
+            <input type="password" placeholder="Password" id="loginPasswordStudent" required>
+            <button class="btn login" onclick="window.location.href='user_main.html';">login</button>
+            <div class="google-login" id="studentGoogleLogin"></div>
+            <p class="signup-link" onclick="showRegistrationForm('student')">I don't have an account. Sign Up</p>
+            <button class="back-button" onclick="backToRoleSelection()">Back</button>
+        </div>
+
+        <div class="login-form" id="studentRegistrationForm">
+            <h2>Student Registration</h2>
+            <input type="text" placeholder="Email" id="studentEmail" required>
+            <input type="password" placeholder="Password" id="studentPassword" required>
+            <input type="text" placeholder="Phone Number" id="studentPhone" required>
+            <input type="text" placeholder="Student ID" id="studentID" required>
+            <button onclick="registerStudent()">Register</button>
+            <p class="signup-link" onclick="showLoginForm('student')">Already have an account? Login</p>
+            <button class="back-button" onclick="showLoginForm('student')">Back</button>
+        </div>
+
+        <div class="login-form" id="staffRegistrationForm">
+            <h2>Staff Registration</h2>
+            <input type="text" placeholder="Email" id="staffEmail" required>
+            <input type="password" placeholder="Password" id="staffPassword" required>
+            <input type="text" placeholder="Phone Number" id="staffPhone" required>
+            <input type="text" placeholder="Employee ID" id="staffID" required>
+            <button onclick="registerStaff()">Register</button>
+            <p class="signup-link" onclick="showLoginForm('staff')">Already have an account? Login</p>
+            <button class="back-button" onclick="showLoginForm('staff')">Back</button>
+        </div>
+
+        <div class="login-form" id="adminRegistrationForm">
+            <h2>Admin Registration</h2>
+            <input type="text" placeholder="Email" id="adminEmail" required>
+            <input type="password" placeholder="Password" id="adminPassword" required>
+            <input type="text" placeholder="Phone Number" id="adminPhone" required>
+            <button onclick="registerAdmin()">Register</button>
+            <p class="signup-link" onclick="showLoginForm('admin')">Already have an account? Login</p>
+            <button class="back-button" onclick="showLoginForm('admin')">Back</button>
+        </div>
+
+        <div class="login-form" id="councilorRegistrationForm">
+            <h2>Councilor Registration</h2>
+            <input type="text" placeholder="Email" id="councilorEmail" required>
+            <input type="password" placeholder="Password" id="councilorPassword" required>
+            <input type="text" placeholder="Phone Number" id="councilorPhone" required>
+            <input type="text" placeholder="Student ID" id="councilorStudentID" required>
+            <button onclick="registerCouncilor()">Register</button>
+            <p class="signup-link" onclick="showLoginForm('councilor')">Already have an account? Login</p>
+            <button class="back-button" onclick="showLoginForm('councilor')">Back</button>
+        </div>
+
+        <div class="login-form" id="clubSecretaryRegistrationForm">
+            <h2>Club Secretary Registration</h2>
+            <input type="text" placeholder="Email" id="clubSecretaryEmail" required>
+            <input type="password" placeholder="Password" id="clubSecretaryPassword" required>
+            <input type="text" placeholder="Phone Number" id="clubSecretaryPhone" required>
+            <input type="text" placeholder="Student ID" id="clubSecretaryStudentID" required>
+            <button onclick="registerClubSecretary()">Register</button>
+            <p class="signup-link" onclick="showLoginForm('clubSecretary')">Already have an account? Login</p>
+            <button class="back-button" onclick="showLoginForm('clubSecretary')">Back</button>
+        </div>
+
+        <!-- Display User Information After Google Login -->
+        <div id="userInfo" style="display: none;">
+            <h3>User Info</h3>
+            <p id="userEmail"></p> <!-- Display user's Google account email -->
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+    <script src="/EMNS/javaScript/login_main.js"></script>
+    <script src="/EMNS/javaScript/menu.js"></script>
+</body>
+</html>
